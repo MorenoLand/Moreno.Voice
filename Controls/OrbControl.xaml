@@ -1,0 +1,18 @@
+<UserControl x:Class="Moreno.Voice.Controls.OrbControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="124" Height="124" IsHitTestVisible="False" SnapsToDevicePixels="False">
+    <Grid>
+        <Ellipse Width="106" Height="106" Margin="0,5,0,0">
+            <Ellipse.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#40000000" Offset="0" />
+                    <GradientStop Color="#2E000000" Offset="0.8" />
+                    <GradientStop Color="#18000000" Offset="0.88" />
+                    <GradientStop Color="#00000000" Offset="1" />
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+        <Image x:Name="Body" Width="92" Height="92" Stretch="Fill" RenderOptions.BitmapScalingMode="HighQuality" />
+    </Grid>
+</UserControl>

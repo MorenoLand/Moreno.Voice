@@ -1,0 +1,15 @@
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.idea/
+
+# Speech models are downloaded by the app at runtime into the user's local app data; they must never be committed.
+*.onnx
+*.download
+Models/
+hotwords.txt
+settings.json

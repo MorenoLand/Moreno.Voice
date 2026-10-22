@@ -1,0 +1,61 @@
+<Window x:Class="Moreno.Voice.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Moreno Voice settings" Width="380" Height="590" WindowStyle="None" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False" Topmost="True"
+        WindowStartupLocation="CenterScreen" FontFamily="{StaticResource UiFont}" TextOptions.TextFormattingMode="Ideal">
+    <Border Margin="16" CornerRadius="16" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+        <Border.Effect><DropShadowEffect BlurRadius="28" ShadowDepth="4" Opacity="0.55" /></Border.Effect>
+        <Grid Margin="22,14,22,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid x:Name="Header" Grid.Row="0" Background="Transparent" Margin="0,0,0,10" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <TextBlock Text="Settings" Foreground="{StaticResource TextBrush}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+                <Button Style="{StaticResource CloseButton}" HorizontalAlignment="Right" Click="Close_Click" />
+            </Grid>
+
+            <StackPanel Grid.Row="1">
+                <Grid Margin="0,10,0,0">
+                    <TextBlock Text="ORB SIZE" Foreground="{StaticResource MutedBrush}" FontSize="11" FontWeight="SemiBold" />
+                    <TextBlock x:Name="SizeValue" Foreground="{StaticResource TextBrush}" FontSize="12" HorizontalAlignment="Right" />
+                </Grid>
+                <Slider x:Name="SizeSlider" Style="{StaticResource OrbSlider}" Minimum="60" Maximum="200" SmallChange="5" LargeChange="10" Margin="0,6,0,0" ValueChanged="SizeSlider_ValueChanged" />
+
+                <TextBlock Text="COLOR" Foreground="{StaticResource MutedBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,26,0,0" />
+                <WrapPanel x:Name="Swatches" Margin="-4,8,0,0" Width="216" HorizontalAlignment="Left" />
+
+                <TextBlock Text="SOUNDS" Foreground="{StaticResource MutedBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,22,0,0" />
+                <Grid Margin="0,10,0,0">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Start and stop chimes" Foreground="{StaticResource TextBrush}" FontSize="13" />
+                        <TextBlock Text="A soft tone when dictation turns on or off" Foreground="{StaticResource MutedBrush}" FontSize="11" Margin="0,2,0,0" />
+                    </StackPanel>
+                    <ToggleButton x:Name="SoundsToggle" Style="{StaticResource SwitchToggle}" HorizontalAlignment="Right" Click="SoundsToggle_Click" />
+                </Grid>
+                <Grid Margin="0,14,0,0">
+                    <TextBlock Text="Volume" Foreground="{StaticResource TextBrush}" FontSize="13" />
+                    <TextBlock x:Name="VolumeValue" Foreground="{StaticResource TextBrush}" FontSize="12" HorizontalAlignment="Right" />
+                </Grid>
+                <Slider x:Name="VolumeSlider" Style="{StaticResource OrbSlider}" Minimum="0" Maximum="100" SmallChange="5" LargeChange="10" Margin="0,2,0,0" ValueChanged="VolumeSlider_ValueChanged" Thumb.DragCompleted="VolumeSlider_DragCompleted" />
+
+                <TextBlock Text="ACCURACY" Foreground="{StaticResource MutedBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,24,0,0" />
+                <Grid Margin="0,10,0,0">
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,56,0">
+                        <TextBlock Text="Sentence correction" Foreground="{StaticResource TextBrush}" FontSize="13" />
+                        <TextBlock Text="Re-reads each sentence with a larger model for punctuation and fewer mistakes. About 660 MB downloaded once; uses about 1 GB of memory." Foreground="{StaticResource MutedBrush}" FontSize="11" Margin="0,2,0,0" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <ToggleButton x:Name="SecondPassToggle" Style="{StaticResource SwitchToggle}" HorizontalAlignment="Right" VerticalAlignment="Top" Click="SecondPassToggle_Click" />
+                </Grid>
+            </StackPanel>
+
+            <Grid Grid.Row="2" Margin="0,16,0,0">
+                <TextBlock Text="Ctrl+Alt+Space to dictate" Foreground="{StaticResource MutedBrush}" FontSize="11" VerticalAlignment="Center" />
+                <Button Content="Reset to defaults" Style="{StaticResource QuietButton}" HorizontalAlignment="Right" Click="Reset_Click" />
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
