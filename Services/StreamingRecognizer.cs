@@ -29,6 +29,9 @@ internal sealed class StreamingRecognizer : IDisposable
 	private volatile float _level;
 	private volatile bool _speaking;
 	private int _pendingRefinements;
+	// Ids are unique for the lifetime of the recognizer, so a correction that arrives after its dictation ended can never match text of a later one.
+	private int _utteranceCounter;
+	private int _phraseCounter;
 	private bool _disposed;
 
 	public event Action<RecognitionUpdate>? Recognized;
@@ -191,7 +194,7 @@ internal sealed class StreamingRecognizer : IDisposable
 		var phraseHasSpeech = false;
 		var phraseSeconds = 0.0;
 		var phraseId = 0;
-		var utterance = new Utterance();
+		var utterance = new Utterance { Id = Interlocked.Increment(ref _utteranceCounter) };
 		try
 		{
 			await foreach (var chunk in reader.ReadAllAsync().ConfigureAwait(false))
@@ -252,12 +255,12 @@ internal sealed class StreamingRecognizer : IDisposable
 		void StartPhrase()
 		{
 			phraseStarted = true;
-			phraseId++;
+			phraseId = Interlocked.Increment(ref _phraseCounter);
 			if (!utterance.IsActive) utterance.Refinable = _refiner is not null;
 			utterance.IsActive = true;
 		}
 
-		void Publish(string text, bool isFinal) => Recognized?.Invoke(new RecognitionUpdate(text, isFinal, phraseHasSpeech ? pauseBefore : 0, utterance.Refinable ? utterance.Id : 1_000_000 + phraseId, phraseId, utterance.Refinable));
+		void Publish(string text, bool isFinal) => Recognized?.Invoke(new RecognitionUpdate(text, isFinal, phraseHasSpeech ? pauseBefore : 0, utterance.Refinable ? utterance.Id : -phraseId, phraseId, utterance.Refinable));
 
 		void CloseUtterance(double trailingQuiet)
 		{
@@ -274,7 +277,7 @@ internal sealed class StreamingRecognizer : IDisposable
 					if (!_refineChannel.Writer.TryWrite(new RefineJob(utterance.Id, samples, refiner))) Interlocked.Decrement(ref _pendingRefinements);
 				}
 			}
-			utterance.Id++;
+			utterance.Id = Interlocked.Increment(ref _utteranceCounter);
 			utterance.PhraseCount = 0;
 			utterance.IsActive = false;
 			utterance.Refinable = false;
@@ -316,7 +319,7 @@ internal sealed class StreamingRecognizer : IDisposable
 
 	private sealed class Utterance
 	{
-		public int Id = 1;
+		public int Id;
 		public int PhraseCount;
 		public bool IsActive;
 		public bool Refinable;

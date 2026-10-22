@@ -230,7 +230,7 @@ public partial class MainWindow : Window
 	{
 		if (_injecting && !_textInjector.Update(update))
 		{
-			ToolTip = "Text injection paused because the original app lost focus";
+			ToolTip = "Waiting for the original app; what you say is kept and typed when you switch back";
 		}
 	});
 
@@ -313,7 +313,7 @@ public partial class MainWindow : Window
 	{
 		_recording = false;
 		_injecting = false;
-		_textInjector.Finish();
+		_textInjector.Abandon();
 		_levelTimer.Stop();
 		_errorTimer.Stop();
 		_source?.RemoveHook(WindowProcedure);
